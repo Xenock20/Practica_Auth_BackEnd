@@ -1,0 +1,31 @@
+{
+  "name": "practicaauth",
+  "version": "1.0.0",
+  "description": "Practica de JWT y bcrypt",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Xenock20/Practica_Auth_BackEnd.git"
+  },
+  "author": "Federico Saboredo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Xenock20/Practica_Auth_BackEnd/issues"
+  },
+  "homepage": "https://github.com/Xenock20/Practica_Auth_BackEnd#readme",
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.0",
+    "mysql2": "^2.3.3"
+  },
+  "devDependencies": {
+    "dotenv": "^16.0.3",
+    "nodemon": "^2.0.20"
+  }
+}
