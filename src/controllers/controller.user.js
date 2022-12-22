@@ -1,6 +1,7 @@
 import { connection } from "../db/db.js";
 import bcrypt from 'bcrypt'
 import dotenv from "dotenv";
+import jwt from 'jsonwebtoken'
 
 dotenv.config();
 
@@ -14,7 +15,7 @@ export const addUser = async (req, res) => {
     [username, email, hashPassword],
     (err, result) => {
       if (err) throw err;
-      res.send("Add Product").status(201);
+      res.send("Add Users").status(201);
     }
   );
 }
@@ -22,7 +23,7 @@ export const addUser = async (req, res) => {
 export const getUser = (req, res) => {
   const { email, passwords } = req.body;
 
-  conect.query("SELECT * FROM users WHERE email = ?", [email], (err, data) => {
+  connection.query("SELECT * FROM users WHERE email = ?", [email], (err, data) => {
     if (err) {
       console.log(err);
     } else {

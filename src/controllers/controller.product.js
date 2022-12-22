@@ -41,7 +41,7 @@ export const updateProduct = (req, res) => {
   const { id } = req.params;
   const { title, price, image, description } = req.body;
 
-  conect.query(
+  connection.query(
     "UPDATE product SET `title` = ?, `price` = ?, `image` = ?, `description` = ? WHERE id = ?",
     [title, price, image, description, id],
     (err) => {
@@ -53,7 +53,7 @@ export const updateProduct = (req, res) => {
 
 export const deleteProduct = (req, res) => {
   const { id } = req.params;
-  conect.query("DELETE FROM product WHERE id = ?", [id], (err) => {
+  connection.query("DELETE FROM product WHERE id = ?", [id], (err) => {
     if (err) throw err;
     res.send("Delete product");
   });
