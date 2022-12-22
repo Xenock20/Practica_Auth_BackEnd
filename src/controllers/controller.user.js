@@ -23,27 +23,44 @@ export const addUser = async (req, res) => {
 export const getUser = (req, res) => {
   const { email, passwords } = req.body;
 
-  connection.query("SELECT * FROM users WHERE email = ?", [email], (err, data) => {
-    if (err) {
-      console.log(err);
-    } else {
-      if (data.length === 0) {
-        res.json({ msg: "No existe este correo" });
-      } else {
-        bcrypt.compare(passwords, data[0].passwords, (err, result) => {
-          if (result) {
-            const { id, username } = data[0];
+  // connection.query("SELECT * FROM users WHERE email = ?", [email], (err, data) => {
+  //   if (err) {
+  //     console.log(err);
+  //   } else {
+  //     if (data.length === 0) {
+  //       res.json({ msg: "No existe este correo" });
+  //     } else {
+  //       bcrypt.compare(passwords, data[0].passwords, (err, result) => {
+  //         if (result) {
+  //           const { id, username } = data[0];
 
-            const token = jwt.sign({ id, username }, process.env.SECRET_KEY, {
-              expiresIn: "1h",
-            });
+  //           const token = jwt.sign({ id, username }, process.env.SECRET_KEY, {
+  //             expiresIn: "1h",
+  //           });
 
-            res.json({ token });
-          } else {
-            res.json({ msg: "Contraseña incorrecta" }).status(401);
-          }
+  //           res.json({ token });
+  //         } else {
+  //           res.json({ msg: "Contraseña incorrecta" }).status(401);
+  //         }
+  //       });
+  //     }
+  //   }
+  // });
+
+  try{
+    connection.query("SELECT * FROM users WHERE email = ?", [email], async (err, data) => {
+      if (err) throw err
+      else {
+        if(data.length === 0) return res.json({ msg: "No existe este correo" })
+        const result = await bcrypt.compare(passwords, data[0].passwords)
+        if(!result) return res.json({ msg: "Contraseña incorrecta" }).status(401)
+        const { id, username } = data[0];
+        const token = jwt.sign({ id, username }, process.env.SECRET_KEY, {
+        expiresIn: "1h",
         });
-      }
-    }
-  });
+        res.json({ token }).status(202);
+      }})
+  }catch(err){
+    res.status(404)
+  }
 }
