@@ -7,6 +7,7 @@ import {
   updateProduct,
 } from "../controllers/controller.product.js";
 import { addUser, getUser } from "../controllers/controller.user.js";
+import { validateToken } from "./validate.router.js";
 
 const router = Router();
 
@@ -16,14 +17,14 @@ router.post("/register", addUser);
 router.post("/login", getUser);
 
 //Products
-router.get("/product", getProducts);
+router.get("/product", validateToken, getProducts);
 
-router.get("/product/:id", getProduct);
+router.get("/product/:id", validateToken, getProduct);
 
-router.post("/product-create", addProduct);
+router.post("/product-create", validateToken, addProduct);
 
-router.put("/product-update/:id", updateProduct);
+router.put("/product-update/:id", validateToken, updateProduct);
 
-router.delete("/product-delete/:id", deleteProduct);
+router.delete("/product-delete/:id", validateToken, deleteProduct);
 
 export default router;

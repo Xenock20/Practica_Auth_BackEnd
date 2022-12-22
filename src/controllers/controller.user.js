@@ -1,7 +1,48 @@
-export const addUser = (req, res) => {
-  res.send("Añadiendo Usuario").status(200)
+import { connection } from "../db/db.js";
+import bcrypt from 'bcrypt'
+import dotenv from "dotenv";
+
+dotenv.config();
+
+export const addUser = async (req, res) => {
+  const { username, email, passwords } = req.body;
+
+  const hashPassword = await bcrypt.hash(passwords, 10)
+
+  connection.query(
+    "INSERT INTO users (username, email, passwords) VALUES (?, ?, ?)",
+    [username, email, hashPassword],
+    (err, result) => {
+      if (err) throw err;
+      res.send("Add Product").status(201);
+    }
+  );
 }
 
 export const getUser = (req, res) => {
-  res.send("Obeteniedo Usuario").status(200)
+  const { email, passwords } = req.body;
+
+  conect.query("SELECT * FROM users WHERE email = ?", [email], (err, data) => {
+    if (err) {
+      console.log(err);
+    } else {
+      if (data.length === 0) {
+        res.json({ msg: "No existe este correo" });
+      } else {
+        bcrypt.compare(passwords, data[0].passwords, (err, result) => {
+          if (result) {
+            const { id, username } = data[0];
+
+            const token = jwt.sign({ id, username }, process.env.SECRET_KEY, {
+              expiresIn: "1h",
+            });
+
+            res.json({ token });
+          } else {
+            res.json({ msg: "Contraseña incorrecta" }).status(401);
+          }
+        });
+      }
+    }
+  });
 }
